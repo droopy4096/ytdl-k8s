@@ -1,5 +1,5 @@
 apiVersion: v2
-name: youtube-dl-server
+name: ytdl-k8s
 description: Youtube Download server
 
 # A chart can be either an 'application' or a 'library' chart.

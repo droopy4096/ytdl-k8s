@@ -8,7 +8,7 @@ image:
   repository: "nbr23/youtube-dl-server"
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "yt-dlp"
+  tag: "f7d9316-yt-dlp"
 
 imagePullSecrets: []
 nameOverride: ""
