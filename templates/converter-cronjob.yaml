@@ -25,6 +25,10 @@ spec:
                 - name: SUFFIX
                   value: {{ .Values.converter.suffix }}
                 {{- end }}
+                - name: OUTPUT_FORMAT
+                  value: {{ default "libx264" .Values.converter.output_format }}
+                - name: FROM_FORMAT
+                  value: {{ default "vp9" .Values.converter.from_format }} 
               volumeMounts:
                 - name: downloads
                   mountPath: /youtube-dl

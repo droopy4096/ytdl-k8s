@@ -95,6 +95,8 @@ ytdl:
 
 converter:
   enabled: false
+  output_format: libx264
+  from_format: vp9
   schedule: "*/10 * * * *"
 
 cleanup:

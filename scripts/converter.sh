@@ -1,5 +1,7 @@
 #!/bin/sh
 
+OUTPUT_FORMAT=${OUTPUT_FORMAT:-"libx264"}
+
 get_codec(){
     local filename=$1
     ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 "$filename"
@@ -8,7 +10,7 @@ get_codec(){
 convert(){
     local in_file=$1
     local out_file=$2
-    ffmpeg -i "${in_file}" -c:a copy -c:v libx264 "${out_file}"
+    ffmpeg -i "${in_file}" -c:a copy -c:v ${OUTPUT_FORMAT} "${out_file}"
 }
 
 find_file(){
