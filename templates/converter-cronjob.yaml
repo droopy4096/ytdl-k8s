@@ -2,9 +2,9 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "youtube-dl-server.fullname" . }}-converter
+  name: {{ include "ytdl-k8s.fullname" . }}-converter
   labels:
-    {{- include "youtube-dl-server.labels" . | nindent 4 }}
+    {{- include "ytdl-k8s.labels" . | nindent 4 }}
 spec:
   schedule: "{{ .Values.converter.schedule }}"
   concurrencyPolicy: Forbid
@@ -41,7 +41,7 @@ spec:
               {{- toYaml .Values.storage.downloads.volume | nindent 14 }}
             - name: scripts
               configMap:
-                name: {{ include "youtube-dl-server.fullname" . }}-config
+                name: {{ include "ytdl-k8s.fullname" . }}-config
                 items:
                   - key: converter.sh
                     path: converter.sh

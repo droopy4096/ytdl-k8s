@@ -2,11 +2,11 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ include "youtube-dl-server.fullname" . }}-downloads
+  name: {{ include "ytdl-k8s.fullname" . }}-downloads
   annotations:
     # nfs.io/storage-path: "test-path" # not required, depending on whether this annotation was shown in the storage class description
   labels:
-    {{- include "youtube-dl-server.labels" . | nindent 4 }}
+    {{- include "ytdl-k8s.labels" . | nindent 4 }}
 spec:
   {{ if .Values.storage.storageClassName }}
   storageClassName: {{ .Values.storage.storageClassName }}

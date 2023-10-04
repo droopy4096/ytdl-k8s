@@ -2,9 +2,9 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "youtube-dl-server.fullname" . }}-cleanup
+  name: {{ include "ytdl-k8s.fullname" . }}-cleanup
   labels:
-    {{- include "youtube-dl-server.labels" . | nindent 4 }}
+    {{- include "ytdl-k8s.labels" . | nindent 4 }}
 spec:
   schedule: "{{ .Values.cleanup.schedule }}"
   concurrencyPolicy: Forbid

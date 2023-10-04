@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "youtube-dl-server.fullname" . }}
+  name: {{ include "ytdl-k8s.fullname" . }}
   labels:
-    {{- include "youtube-dl-server.labels" . | nindent 4 }}
+    {{- include "ytdl-k8s.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "youtube-dl-server.selectorLabels" . | nindent 6 }}
+      {{- include "ytdl-k8s.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,13 +19,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "youtube-dl-server.selectorLabels" . | nindent 8 }}
+        {{- include "ytdl-k8s.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "youtube-dl-server.serviceAccountName" . }}
+      serviceAccountName: {{ include "ytdl-k8s.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
@@ -77,7 +77,7 @@ spec:
           {{- toYaml .Values.storage.downloads.volume | nindent 10 }}
         - name: config
           configMap:
-            name: {{ include "youtube-dl-server.fullname" . }}-config
+            name: {{ include "ytdl-k8s.fullname" . }}-config
             items:
               - key: config.yml
                 path: config.yml
