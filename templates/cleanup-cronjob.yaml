@@ -1,0 +1,32 @@
+{{ if .Values.cleanup.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "youtube-dl-server.fullname" . }}-cleanup
+  labels:
+    {{- include "youtube-dl-server.labels" . | nindent 4 }}
+spec:
+  schedule: "{{ .Values.cleanup.schedule }}"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: cleanup
+              image: "{{ .Values.cleanup.image.repository }}:{{ .Values.cleanup.image.tag }}"
+              imagePullPolicy: "{{ .Values.cleanup.image.pullPolicy }}"
+              command:
+                # Remove empty dirs
+                - /bin/sh
+                - -c
+                - 'find /youtube-dl -type d -empty -print -exec rmdir \{\} \;'
+              volumeMounts:
+                - name: downloads
+                  mountPath: /youtube-dl
+          restartPolicy: OnFailure
+
+          volumes:
+            - name: downloads
+              {{- toYaml .Values.storage.downloads.volume | nindent 14 }}
+{{ end }}

@@ -1,0 +1,44 @@
+{{ if .Values.converter.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "youtube-dl-server.fullname" . }}-converter
+  labels:
+    {{- include "youtube-dl-server.labels" . | nindent 4 }}
+spec:
+  schedule: "{{ .Values.converter.schedule }}"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: converter
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/sh
+                - -c
+                - /bin/sh /scripts/converter.sh /youtube-dl '*.mp4' vp9
+              env:
+                {{- if .Values.converter.suffix }}
+                - name: SUFFIX
+                  value: {{ .Values.converter.suffix }}
+                {{- end }}
+              volumeMounts:
+                - name: downloads
+                  mountPath: /youtube-dl
+                - name: scripts
+                  mountPath: /scripts
+          restartPolicy: OnFailure
+
+          volumes:
+            - name: downloads
+              {{- toYaml .Values.storage.downloads.volume | nindent 14 }}
+            - name: scripts
+              configMap:
+                name: {{ include "youtube-dl-server.fullname" . }}-config
+                items:
+                  - key: converter.sh
+                    path: converter.sh
+{{ end }}

@@ -1,0 +1,19 @@
+{{ if not .Values.storage.downloads.volume }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "youtube-dl-server.fullname" . }}-downloads
+  annotations:
+    # nfs.io/storage-path: "test-path" # not required, depending on whether this annotation was shown in the storage class description
+  labels:
+    {{- include "youtube-dl-server.labels" . | nindent 4 }}
+spec:
+  {{ if .Values.storage.storageClassName }}
+  storageClassName: {{ .Values.storage.storageClassName }}
+  {{ end }}
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.storage.downloads.size | default "100Gi" }}
+{{ end }}
