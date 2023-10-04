@@ -52,3 +52,7 @@ converter:
   # add filename suffix after conversion for easy recognition of converted files (optional):
   suffix: "h264"
 ```
+
+## Usage
+
+See https://github.com/nbr23/youtube-dl-server#usage for usecases once chart/service is deployed
