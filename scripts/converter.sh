@@ -27,8 +27,12 @@ find_file(){
         | shuf -n 1 | cut -d':' -f '2-'
 }
 
+echo "Initiating conversion..."
 filename=$(find_file "$@")
-[ -z "${filename}" ] && exit 0
+if [ -z "${filename}" ] ; then
+    echo "No files for conversion found: $@"
+    exit 0
+fi
 echo "==> Selecting from:"
 cat /tmp/file_list
 echo "==> Selected: ${filename}"
@@ -46,3 +50,7 @@ else
 fi
 
 convert "$from_file" "$to_file"
+
+if [ -r "$from_file" -a -r "$to_file" ] ; then
+    rm "$from_file"
+fi
